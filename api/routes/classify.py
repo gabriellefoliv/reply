@@ -5,6 +5,10 @@ from services.gemini import analyze_with_gemini
 
 router = APIRouter()
 
+@router.head("/health")
+def health_check():
+    return {"status": "ok"}
+
 @router.post("/classify", response_model=ClassifyResponse)
 def classify(req: ClassifyRequest):
     email_text = process_email(req)
