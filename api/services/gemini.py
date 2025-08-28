@@ -2,7 +2,7 @@ import re, json
 from fastapi import HTTPException
 import google.generativeai as genai
 from config import MODEL_NAME
-from schemas.classify import AnalyzeResponse
+from schemas.classify import ClassifyResponse
 
 def build_prompt(email_text: str, language: str) -> str:
     return f"""
@@ -45,7 +45,7 @@ def analyze_with_gemini(cleaned: str, language: str):
     else:
         category = "Produtivo"
 
-    return AnalyzeResponse(
+    return ClassifyResponse(
         category=category,
         suggested_reply=data.get("suggested_reply", "").strip(),
         tokens_estimate=(
