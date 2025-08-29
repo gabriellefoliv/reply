@@ -20,6 +20,8 @@ export default function Home() {
   const [result, setResult] = useState<{ category: string; suggested_reply: string } | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const MAX_CHARACTERS = 2000
+
   const handleFileChange = (files: File[]) => {
     if (files.length > 0) setFile(files[0]);
   };
@@ -35,7 +37,9 @@ export default function Home() {
         payload.file_base64 = b64;
         payload.filename = file.name;
       } else {
-        payload.text = text;
+        const safeText = text ?? "";
+        const truncatedText = safeText.length > MAX_CHARACTERS ? safeText.slice(0, MAX_CHARACTERS) : safeText;
+        payload.text = truncatedText;
       }
 
       const res = await api.post("/classify", payload);
@@ -50,6 +54,7 @@ export default function Home() {
       setLoading(false);
     }
   };
+
 
   const getStatusStyle = (status: string | undefined) => {
     switch (status) {
@@ -91,12 +96,17 @@ export default function Home() {
           </div>
 
           <FileUpload onChange={handleFileChange} />
-          <Textarea  
+          <Textarea
             value={emailText}
-            onChange={(e) => setEmailText(e.target.value)}
-            placeholder="Cole aqui o seu e-mail para gerar uma resposta automática..." 
+            onChange={(e) => {
+              if (e.target.value.length <= MAX_CHARACTERS) {
+                setEmailText(e.target.value);
+              }
+            }}
+            placeholder="Cole aqui o seu e-mail para gerar uma resposta automática..."
             className="font-bold text-zinc-100 placeholder-zinc-100/70 w-full"
           />
+          <span className="w-full text-zinc-400 text-sm text-right gap-0 -mt-4">{emailText.length}/{MAX_CHARACTERS}</span>
 
           <Button
             onClick={() => analyzeEmail({ text: emailText, file })}
@@ -109,41 +119,45 @@ export default function Home() {
           </Button>
         </section>
 
-        <section className="flex flex-col gap-6 overflow-y-auto max-h-[80vh]">
-          <Boxes/>  
-          <div className="flex items-center gap-2">
-            <p className="text-white font-bold">A IA classifica o seu e-mail em: </p>
-            <div className={`flex items-center gap-2 px-3 py-1 rounded-full border ${getStatusStyle("Produtivo")}`}>
-                {getStatusIcon("Produtivo")}
-                {"Produtivo"}
+        <section className="flex flex-col gap-6 max-h-[80vh] p-4 md:p-6 mb-10">
+          <Boxes />
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+            <p className="text-white font-bold mb-2 sm:mb-0">A IA classifica o seu e-mail em:</p>
+            
+            <div className={`flex items-center px-3 py-1 rounded-full border ${getStatusStyle("Produtivo")}`}>
+              {getStatusIcon("Produtivo")}
+              {"Produtivo"}
             </div>
-            <div className={`flex items-center gap-2 px-3 py-1 rounded-full border ${getStatusStyle("Improdutivo")}`}>
-                {getStatusIcon("Improdutivo")}
-                {"Improdutivo"}
+            
+            <div className={`flex items-center px-3 py-1 rounded-full border ${getStatusStyle("Improdutivo")}`}>
+              {getStatusIcon("Improdutivo")}
+              {"Improdutivo"}
             </div>
           </div>
 
-          {result ? (<>
-            <div className="flex items-center gap-4">
-              <p className="text-zinc-900 text-center font-bold">CLASSIFICAÇÃO: </p>
-              <div className={`flex items-center gap-2 px-3 py-1 rounded-full border ${getStatusStyle(result.category)}`}>
-                {getStatusIcon(result.category)}
-                {result.category}
+          {result ? (
+            <>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-2 mt-2 flex-wrap">
+                <p className="text-zinc-900 text-center font-bold mb-1 sm:mb-0">CLASSIFICAÇÃO:</p>
+                <div className={`flex items-center gap-2 px-3 py-1 rounded-full border ${getStatusStyle(result.category)}`}>
+                  {getStatusIcon(result.category)}
+                  {result.category}
+                </div>
               </div>
-            </div>
-          
-            <Email
-              title="Resposta Sugerida"
-              content={result.suggested_reply}
-            />
+
+              <Email
+                title="Resposta Sugerida"
+                content={result.suggested_reply}
+              />
             </>
-          ):(
+          ) : (
             <Email 
               title="Exemplo de Resposta"
-              content="Olá! Claro, o relatório já está em andamento e será enviado até sexta-feira como solicitado.
-              Obrigado pelo contato!"
+              content="Olá! Claro, o relatório já está em andamento e será enviado até sexta-feira como solicitado. Obrigado pelo contato!"
             />
           )}
+          <div className="h-10" />
         </section>
 
       </div>
