@@ -3,5 +3,6 @@ uvicorn
 pydantic
 pypdf
 google-generativeai
-spacy
+numpy<1.24,>=1.15.0
+spacy==3.4.4
 https://github.com/explosion/spacy-models/releases/download/pt_core_news_sm-3.4.0/pt_core_news_sm-3.4.0-py3-none-any.whl
