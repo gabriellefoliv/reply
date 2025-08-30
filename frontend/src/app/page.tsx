@@ -123,7 +123,7 @@ export default function Home() {
           <Boxes />
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-            <p className="text-white font-bold mb-2 sm:mb-0">A IA classifica o seu e-mail em:</p>
+            <p className="text-white font-bold mb-2 sm:mb-0">Classificamos o seu e-mail em:</p>
             
             <div className={`flex items-center px-3 py-1 rounded-full border ${getStatusStyle("Produtivo")}`}>
               {getStatusIcon("Produtivo")}
@@ -139,7 +139,7 @@ export default function Home() {
           {result ? (
             <>
               <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-2 mt-2 flex-wrap">
-                <p className="text-zinc-900 text-center font-bold mb-1 sm:mb-0">CLASSIFICAÇÃO:</p>
+                <p className="text-white text-center font-bold mb-1 sm:mb-0">CLASSIFICAÇÃO:</p>
                 <div className={`flex items-center gap-2 px-3 py-1 rounded-full border ${getStatusStyle(result.category)}`}>
                   {getStatusIcon(result.category)}
                   {result.category}

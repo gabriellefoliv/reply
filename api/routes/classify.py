@@ -16,4 +16,4 @@ def classify(req: ClassifyRequest):
     if not email_text.strip():
         raise HTTPException(status_code=400, detail="Conteúdo vazio após leitura do email.")
 
-    return analyze_with_gemini(email_text, req.language)
+    return analyze_with_gemini(email_text)

@@ -1,6 +1,5 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
-from mangum import Mangum
 from routes import classify
 
 app = FastAPI(
@@ -23,9 +22,6 @@ app.add_middleware(
 )
 
 app.include_router(classify.router)
-
-# Handler para AWS Lambda
-handler = Mangum(app)
 
 # Execução local
 if __name__ == "__main__":

@@ -6,7 +6,6 @@ class ClassifyRequest(BaseModel):
     text: Optional[str] = Field(default=None, description="Texto do email")
     file_base64: Optional[str] = Field(default=None, description="Arquivo .pdf ou .txt em Base64")
     filename: Optional[str] = Field(default=None, description="Nome do arquivo")
-    language: str = Field(default="pt-BR", description="Idioma de saída")
 
 class ClassifyResponse(BaseModel):
     category: str

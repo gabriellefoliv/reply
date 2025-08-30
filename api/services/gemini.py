@@ -4,12 +4,12 @@ import google.generativeai as genai
 from config import MODEL_NAME
 from schemas.classify import ClassifyResponse
 
-def build_prompt(email_text: str, language: str) -> str:
+def build_prompt(email_text: str) -> str:
     return f"""
         Classifique o email como "Produtivo" (requer ação/resposta, ex.: pedido, dúvida, atualização)
         ou "Improdutivo" (sem ação imediata, ex.: agradecimento, felicitação).
 
-        Gere uma resposta PROFISSIONAL no idioma {language}:
+        Gere uma resposta PROFISSIONAL:
         - Produtivo: objetiva, peça dados faltantes ou indique próximo passo.
         - Improdutivo: cordial e breve.
 
@@ -23,8 +23,8 @@ def build_prompt(email_text: str, language: str) -> str:
         \"\"\"{email_text}\"\"\"
         """
 
-def analyze_with_gemini(cleaned: str, language: str):
-    prompt = build_prompt(cleaned, language)
+def analyze_with_gemini(cleaned: str):
+    prompt = build_prompt(cleaned)
     model = genai.GenerativeModel(MODEL_NAME)
     result = model.generate_content(prompt)
 

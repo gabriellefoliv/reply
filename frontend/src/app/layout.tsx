@@ -34,12 +34,12 @@ export default function RootLayout({
         <BackgroundGradientAnimation
           gradientBackgroundStart="#0A1A2F"
           gradientBackgroundEnd="#142F4B"
-          firstColor="77, 166, 255"      // #4DA6FF
-          secondColor="30, 144, 255"     // #1E90FF
-          thirdColor="51, 153, 255"      // #3399FF
-          fourthColor="15, 42, 80"       // #0F2A50
-          fifthColor="128, 207, 255"     // #80CFFF
-          pointerColor="30, 144, 255"    // #1E90FF
+          firstColor="77, 166, 255"     
+          secondColor="30, 144, 255"    
+          thirdColor="51, 153, 255"     
+          fourthColor="15, 42, 80"      
+          fifthColor="128, 207, 255"   
+          pointerColor="30, 144, 255"   
           size="80%"
           blendingValue="hard-light"
         >
