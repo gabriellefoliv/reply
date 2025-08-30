@@ -63,16 +63,14 @@ export const FileUpload = ({
   };
 
   const handleFileChange = async (newFiles: File[]) => {
-    const validFiles: File[] = [];
+    if (newFiles.length === 0) return;
 
-    for (const file of newFiles) {
-      const isValid = await validateFile(file);
-      if (isValid) validFiles.push(file);
-    }
+    const file = newFiles[0]; 
+    const isValid = await validateFile(file);
 
-    if (validFiles.length > 0) {
-      setFiles((prevFiles) => [...prevFiles, ...validFiles]);
-      onChange && onChange(validFiles);
+    if (isValid) {
+      setFiles([file]); 
+      onChange && onChange([file]);
     }
   };
 
