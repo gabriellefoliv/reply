@@ -37,20 +37,29 @@ export const FileUpload = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateFile = async (file: File): Promise<boolean> => {
-    try {
-      const text = await file.text();
-      const lines = text.split(/\r?\n/).filter((line) => line.trim() !== "");
-      if (lines.length > 10) {
-        // console.error("O arquivo deve conter no máximo 10 linhas.");
-        toast.error("O arquivo deve conter no máximo 10 linhas.");
-        return false;
-      }
-      return true;
-    } catch (err) {
-      // console.error("Erro ao ler o arquivo.");
-      toast.error("Erro ao ler o arquivo, tente novamente.");
+    const maxSizeMB = 2;
+    if (file.size > maxSizeMB * 1024 * 1024) {
+      toast.error("O arquivo deve ter no máximo 2MB.");
       return false;
     }
+
+    if (file.type === "application/pdf") {
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const text = new TextDecoder().decode(arrayBuffer);
+        const matches = text.match(/\/Type\s*\/Page\b/g);
+        const pageCount = matches ? matches.length : 0;
+        if (pageCount > 2) {
+          toast.error("O PDF deve ter no máximo 2 páginas.");
+          return false;
+        }
+      } catch (err) {
+        toast.error("Erro ao validar o PDF.");
+        return false;
+      }
+    }
+
+    return true;
   };
 
   const handleFileChange = async (newFiles: File[]) => {
